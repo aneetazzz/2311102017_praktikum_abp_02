@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil AJAX Cantik</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      background: linear-gradient(
+        135deg,
+        #f7e8ff 0%,
+        #efe3ff 20%,
+        #e3f0ff 40%,
+        #e7fff5 60%,
+        #fff4d6 80%,
+        #ffe4ef 100%
+      );
+    }
+
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 15px 35px rgba(155, 113, 201, 0.18);
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #e7d4ff, #dff2ff, #ffe0f0);
+      color: #6f4ba5;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    h1 {
+      color: #6f4ba5;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      color: #7c6f92;
+      font-size: 15px;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 26px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, #c9a7ff, #a9c9ff, #ffb6d9);
+      box-shadow: 0 10px 20px rgba(170, 130, 220, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 26px rgba(170, 130, 220, 0.35);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    #hasil-profil {
+      margin-top: 24px;
+      min-height: 70px;
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #faf5ff, #f6fbff, #fff6fb);
+      border: 1px solid #eadcff;
+      color: #5d4d73;
+      font-size: 16px;
+      line-height: 1.7;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .profil-item {
+      margin: 6px 0;
+    }
+
+    .label {
+      font-weight: 700;
+      color: #7e57c2;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Profil Pengguna</h1>
+    <p class="subtitle">
+    </p>
+
+    <button id="btnProfil">Tampilkan Profil</button>
+
+    <div id="hasil-profil">
+      Data profil akan tampil di sini.
+    </div>
+  </div>
+
+  <script>
+    const btnProfil = document.getElementById("btnProfil");
+    const hasilProfil = document.getElementById("hasil-profil");
+
+    btnProfil.addEventListener("click", async () => {
+      hasilProfil.innerHTML = "Memuat profil...";
+      btnProfil.disabled = true;
+      btnProfil.style.opacity = "0.8";
+
+      try {
+        const response = await fetch("data.json");
+
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data");
+        }
+
+        const data = await response.json();
+
+        hasilProfil.innerHTML = `
+          <div class="profil-item"><span class="label">Nama:</span> ${data.nama}</div>
+          <div class="profil-item"><span class="label">Pekerjaan:</span> ${data.pekerjaan}</div>
+          <div class="profil-item"><span class="label">Lokasi:</span> ${data.lokasi}</div>
+        `;
+      } catch (error) {
+        hasilProfil.innerHTML = "Data gagal dimuat.";
+        console.error(error);
+      } finally {
+        btnProfil.disabled = false;
+        btnProfil.style.opacity = "1";
+      }
+    });
+  </script>
+</body>
+</html>
